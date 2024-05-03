@@ -3,8 +3,11 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([User])], // En este caso importamos solo user entity
   controllers: [UsersController],
   providers: [UsersService]
 })

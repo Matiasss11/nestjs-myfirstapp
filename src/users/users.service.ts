@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './user.entity';
+import { Repository } from 'typeorm';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
+    
+    constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+    
 
+    /*
     private users: any = [
         {
             id: 1,
@@ -16,16 +24,32 @@ export class UsersService {
             phone: '87654321'
         }
     ]
+    */
+
     getUsers() {
-        return this.users;
+        return this.userRepository.find(); // Find trae todos los users
     }
 
     createUser(user: CreateUserDto) {
-        this.users.push(user);
+        const newUser = this.userRepository.create(user);
 
-        return {
-            ...user,
-            id: this.users.length + 1
-        };
+        return this.userRepository.save(newUser);
+
+    }
+
+    getUser(id: number) {
+        return this.userRepository.findOne({    // FindOne espera que le pasemos opciones para buscar un registro en base al dato que le pasamos
+            where: {
+                id
+            }
+        }); 
+    }
+
+    updateUser(id: number, user: UpdateUserDto) {
+        return this.userRepository.update({id}, user);
+    }
+
+    deleteUser(id: number) {
+        return this.userRepository.delete({ id });
     }
 }
