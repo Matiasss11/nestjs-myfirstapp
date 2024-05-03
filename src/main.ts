@@ -22,6 +22,6 @@ async function bootstrap() {
 
   app.enableCors(); // Habilitar otros dominios puedan acceder, se puede especicar que dominios usuando origin que es un string y se especifica el dominio
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
